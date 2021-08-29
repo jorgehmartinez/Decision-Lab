@@ -10,11 +10,16 @@ output:
     theme: flatly
     lang: es-ES
   pdf_document: default
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
-# 0. Cargar paquetes 
+# 0. Cargar paquetes
 
-Se utilizaron los siguientes paquetes para la importación (`readxl`), manipulación (`tidyverse`) y personalización (`hrbrthemes`, `ggrepel`) de los datos.
+Se utilizaron los siguientes paquetes para la importación (`readxl`),
+manipulación (`tidyverse`) y personalización (`hrbrthemes`, `ggrepel`,
+`plotly`) de los datos.
 
 ```{r message=FALSE, warning=FALSE}
 library(readxl)
@@ -25,6 +30,7 @@ library(plotly)
 ```
 
 # 1. Base de datos
+
 Exportamos la data con el paquete `readxl`
 
 ```{r}
@@ -36,7 +42,9 @@ edad      <- read_xlsx("INEI_data.xlsx", sheet = "Edad")
 ```
 
 # 2. Preparar data
-Redondeamos todas las variables númericas con la función *mutate* del paquete `dplr`
+
+Redondeamos todas las variables númericas con la función *mutate* del
+paquete `dplyr`
 
 ```{r}
 total     <- total %>% mutate_if(is.numeric, round)
@@ -47,25 +55,64 @@ edad      <- edad %>% mutate_if(is.numeric, round)
 ```
 
 # 3. Visualizar data
-Los siguientes gráficos fueron elaborados con el paquete `ggplot2`, y personalizados con las extensiones `hrbrthemes` y `ggrepel`.
+
+Los siguientes gráficos fueron elaborados con el paquete `ggplot2`, y
+personalizados con las extensiones `hrbrthemes` y `ggrepel`.
 
 ## 3.1 Empleo y desempleo
 
 ### Glosario de términos
 
-| **VARIABLE** | **DEFINICIÓN** |
-|:---------|:---------|
-| Población en edad de trabajar (PET) | Población definida como apta en cuanto a edad para ejercer funciones productivas (de 14 años y más de edad)|
-| Población económicamente activa (PEA) | Personas, que contando con la edad mínima establecida , ofrecen la mano de obra disponible para la producción de bienes y/o servicios durante un tiempo determinado |
-| *Tasa de ocupación* | Proporción de la PEA (población económicamente activa) respecto de la PET (población en edad de trabajar) |
-| PEA Ocupada | Personas que, contando con la edad mínima especificada,  se encontraban realizando algún trabajo durante el período de referencia|
-| *Tasa de empleo* | Proporción de la población ocupada respecto de la PEA (población económicamente activa)
-PEA Desocupada o Desempleo abierto | Este concepto abarca tanto a personas que buscaron trabajo pero que trabajaron antes (cesantes), como a los que buscaron trabajo por primera vez (aspirantes)| 
-|*Tasa de desempleo abierto* | Proporción de personas desempleadas o desocupadas, que están buscando activamente un empleo, entre la PEA|
++-----------------------------------+-----------------------------------+
+| VARIABLE[^1]                      | **DEFINICIÓN**                    |
++:==================================+:==================================+
+| Población en edad de trabajar     | Población definida como apta en   |
+| (PET)                             | cuanto a edad para ejercer        |
+|                                   | funciones productivas (de 14 años |
+|                                   | y más de edad)                    |
++-----------------------------------+-----------------------------------+
+| Población económicamente activa   | Personas, que contando con la     |
+| (PEA)                             | edad mínima establecida , ofrecen |
+|                                   | la mano de obra disponible para   |
+|                                   | la producción de bienes y/o       |
+|                                   | servicios durante un tiempo       |
+|                                   | determinado                       |
++-----------------------------------+-----------------------------------+
+| *Tasa de ocupación*               | Proporción de la PEA (población   |
+|                                   | económicamente activa) respecto   |
+|                                   | de la PET (población en edad de   |
+|                                   | trabajar)                         |
++-----------------------------------+-----------------------------------+
+| PEA Ocupada                       | Personas que, contando con la     |
+|                                   | edad mínima especificada, se      |
+|                                   | encontraban realizando algún      |
+|                                   | trabajo durante el período de     |
+|                                   | referencia                        |
++-----------------------------------+-----------------------------------+
+| *Tasa de empleo*                  | Proporción de la población        |
+|                                   | ocupada respecto de la PEA        |
+|                                   | (población económicamente activa) |
++-----------------------------------+-----------------------------------+
+| PEA Desocupada o Desempleo        | Este concepto abarca tanto a      |
+| abierto                           | personas que buscaron trabajo     |
+|                                   | pero que trabajaron antes         |
+|                                   | (cesantes), como a los que        |
+|                                   | buscaron trabajo por primera vez  |
+|                                   | (aspirantes)                      |
++-----------------------------------+-----------------------------------+
+| *Tasa de desempleo abierto*       | Proporción de personas            |
+|                                   | desempleadas o desocupadas, que   |
+|                                   | están buscando activamente un     |
+|                                   | empleo, entre la PEA              |
++-----------------------------------+-----------------------------------+
+
+[^1]: INEI:
+    <https://www.inei.gob.pe/media/MenuRecursivo/publicaciones_digitales/Est/Lib1676/06.pdf>
 
 ![](estructura.png)
 
 ### **Evolución de tasa de ocupación**
+
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 g1 <- total %>% 
   ggplot(aes(x = year)) +
@@ -88,7 +135,9 @@ ggplotly(g1)
 ```
 
 ### **Evolución de tasa de ocupación según sexo**
-> Se observa una amplia brecha entre hombres y mujeres (alrededor de 17 pp), la cual aumenta en 2pp el último año.
+
+> Se observa una amplia brecha entre hombres y mujeres (alrededor de 17
+> pp), la cual aumenta en 2pp el último año.
 
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 sexo %>% 
@@ -115,7 +164,9 @@ sexo %>%
 ```
 
 ### **Evolución de tasa de desempleo abierto según sexo**
-> Se observan valores similares entre hombres y mujeres. Asimismo, la variación en el último año es equivalente en ambos (alrededor de 3pp).
+
+> Se observan valores similares entre hombres y mujeres. Asimismo, la
+> variación en el último año es equivalente en ambos (alrededor de 3pp).
 
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 sexo %>% 
@@ -141,8 +192,10 @@ sexo %>%
 ```
 
 ### **Evolución de tasa de ocupación según ámbito geográfico**
-> Se observa menores índices de ocupación (menores a 70 pp) 
-en personas de zonas rurales. Estos bajos índices disminuyen aún más en el último año (caída alredor de 13pp).
+
+> Se observa menores índices de ocupación (menores a 70 pp) en personas
+> de zonas rurales. Estos bajos índices disminuyen aún más en el último
+> año (caída alredor de 13pp).
 
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 ambito %>% 
@@ -168,8 +221,11 @@ ambito %>%
 ```
 
 ### **Evolución de tasa de ocupación según nivel educativo**
-> Se observa menores índices de ocupación (menores a 60 pp) 
-en personas con educación universitaria, seguidos por personas sin nivel educativo. Estos bajos índices disminuyen aún más en el último año (caída alredor de 11pp).
+
+> Se observa menores índices de ocupación (menores a 60 pp) en personas
+> con educación universitaria, seguidos por personas sin nivel
+> educativo. Estos bajos índices disminuyen aún más en el último año
+> (caída alredor de 11pp).
 
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 educacion <- educacion %>% 
@@ -200,8 +256,10 @@ educacion %>%
 ```
 
 ### **Evolución de tasa de ocupación según grupo etario**
-> Se observa menores índices de ocupación (menores a 50 pp) 
-en adultos mayores, seguidos por jóvenes. Estos bajos índices disminuyen aún más en el último año (caída alredor de 6pp).
+
+> Se observa menores índices de ocupación (menores a 50 pp) en adultos
+> mayores, seguidos por jóvenes. Estos bajos índices disminuyen aún más
+> en el último año (caída alredor de 6pp).
 
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 edad <- edad %>% 
@@ -235,16 +293,36 @@ edad %>%
 
 ### Glosario de términos
 
-| **VARIABLE** | **DEFINICIÓN** |
-|:---------|:---------|
-| Empleo formal | Comprende el total de empleos en empresas que cumplen con las normas establecidas por el Estado |
-| Empleo informal | Comprende el total de empleos informales, ya sea en empresas del sector formal, empresas del sector informal, o en hogares |
-| Empleo informal en el sector informal | Trabajadores en empresas sin personalidad jurídica que no están registradas o que son pequeñas|
-| Empleo informal fuera del sector informal| Trabajadores en empresas formales y no cubiertos por la protección social, así como las trabajadoras del hogar, los jornaleros ocasionales y los trabajadores familiares |
++-----------------------------------+-----------------------------------+
+| **VARIABLE**                      | **DEFINICIÓN**                    |
++:==================================+:==================================+
+| Empleo formal                     | Comprende el total de empleos en  |
+|                                   | empresas que cumplen con las      |
+|                                   | normas establecidas por el Estado |
++-----------------------------------+-----------------------------------+
+| Empleo informal                   | Comprende el total de empleos     |
+|                                   | informales, ya sea en empresas    |
+|                                   | del sector formal, empresas del   |
+|                                   | sector informal, o en hogares     |
++-----------------------------------+-----------------------------------+
+| Empleo informal en el sector      | Trabajadores en empresas sin      |
+| informal                          | personalidad jurídica que no      |
+|                                   | están registradas o que son       |
+|                                   | pequeñas                          |
++-----------------------------------+-----------------------------------+
+| Empleo informal fuera del sector  | Trabajadores en empresas formales |
+| informal                          | y no cubiertos por la protección  |
+|                                   | social, así como las trabajadoras |
+|                                   | del hogar, los jornaleros         |
+|                                   | ocasionales y los trabajadores    |
+|                                   | familiares                        |
++-----------------------------------+-----------------------------------+
 
 ### **Evolución de la tasa de empleo informal según sexo**
-> Se observa una brecha entre hombres y mujeres (alrededor de 7 pp). En el último año, se observa que esta se reduce a 3pp a raíz de un 
-aumento de la informalidad en hombres.
+
+> Se observa una brecha entre hombres y mujeres (alrededor de 7 pp). En
+> el último año, se observa que esta se reduce a 3pp a raíz de un
+> aumento de la informalidad en hombres.
 
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 sexo %>% 
@@ -271,7 +349,10 @@ sexo %>%
 ```
 
 ### **Evolución de la tasa de empleo informal según ámbito geográfico**
-> Se observa una amplia brecha entre las personas de origen rural y urbano (cercanos a 30 pp). Sin embargo, no se encuentra una variación considerable de la brecha por la pandemia (29 vs 28 pp).
+
+> Se observa una amplia brecha entre las personas de origen rural y
+> urbano (cercanos a 30 pp). Sin embargo, no se encuentra una variación
+> considerable de la brecha por la pandemia (29 vs 28 pp).
 
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 ambito %>% 
@@ -298,8 +379,11 @@ ambito %>%
 ```
 
 ### **Evolución de la tasa de empleo informal según nivel educativo**
-> Se observa mayores índices de empleo informal (mayores a 90 pp) 
-en  personas sin nivel educativo o solo con primaria completa. Sin embargo, el impacto por la pandemia es mayor en personas con educación universitaria (7 pp)
+
+> Se observa mayores índices de empleo informal (mayores a 90 pp) en
+> personas sin nivel educativo o solo con primaria completa. Sin
+> embargo, el impacto por la pandemia es mayor en personas con educación
+> universitaria (7 pp)
 
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 educacion %>% 
@@ -334,8 +418,9 @@ educacion %>%
 ```
 
 ### **Evolución de la tasa de empleo informal según grupo etario**
-> Se observa mayores índices de empleo informal (cercanos a 90 pp) 
-en los adultos mayores, seguidos por los jóvenes. 
+
+> Se observa mayores índices de empleo informal (cercanos a 90 pp) en
+> los adultos mayores, seguidos por los jóvenes.
 
 ```{r, echo = FALSE, warning = FALSE, out.width="100%"}
 edad %>% 
@@ -357,7 +442,3 @@ edad %>%
   scale_x_continuous(limits = c(2007,2020),
                      breaks = seq(2008,2020,2)) 
 ```
-
-
-
-
