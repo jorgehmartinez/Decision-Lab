@@ -1,6 +1,6 @@
 # Análisis de variables económicas - Decisión Lab PUCP
 
-El trabajo es parte de una propuesta de investigación elaborada por el laboratorio [Decisión Lab PUCP](https://www.facebook.com/decisionlabPUCP)
+Este análisis forma parte de una propuesta de investigación elaborada por el laboratorio [Decisión Lab PUCP](https://www.facebook.com/decisionlabPUCP)
 
 Se elaboraron gráficos para visualizar la evolución, durante el periodo 2004-2020, de las siguientes variables:
 - **Tasa de ocupación:** Proporción de la PEA (población económicamente activa) respecto de la PET (población en edad de trabajar)
